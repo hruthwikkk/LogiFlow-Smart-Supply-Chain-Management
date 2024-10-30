@@ -3,14 +3,17 @@ package com.supplychain.service;
 import com.supplychain.model.Alert;
 import com.supplychain.repository.AlertRepository;
 import com.supplychain.kafka.KafkaProducerService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class AlertService {
+    public AlertService(AlertRepository alertRepository, KafkaProducerService kafkaProducer) {
+        this.alertRepository = alertRepository;
+        this.kafkaProducer = kafkaProducer;
+    }
+
     private final AlertRepository alertRepository;
     private final KafkaProducerService kafkaProducer;
     

@@ -10,18 +10,18 @@ public class Alert {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Enumerated(EnumType.STRING)
     private AlertType type;
-    
+
     private String message;
     private LocalDateTime timestamp;
     private LocalDateTime createdAt;
-    
+
     public enum AlertType {
         WARNING, ERROR, INFO
     }
-    
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

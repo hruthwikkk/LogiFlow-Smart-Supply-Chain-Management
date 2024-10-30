@@ -1,36 +1,39 @@
 package com.supplychain.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import java.time.LocalDateTime;
+
+@Data
+@Entity
 public class Shipment {
-    public enum ShipmentStatus {
-        PENDING, SHIPPED, DELIVERED, DELAYED
-    }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private String origin;
+    private String destination;
+    
+    @Enumerated(EnumType.STRING)
     private ShipmentStatus status;
+    
+    private LocalDateTime eta;
     private int progress;
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    
+    public enum ShipmentStatus {
+        IN_TRANSIT, DELIVERED, DELAYED
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
-
-    public ShipmentStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ShipmentStatus status) {
-        this.status = status;
-    }
-
-    public int getProgress() {
-        return progress;
-    }
-
-    public void setProgress(int progress) {
-        this.progress = progress;
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

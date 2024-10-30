@@ -1,54 +1,38 @@
 package com.supplychain.model;
 
-public class Inventory {
-    public enum InventoryStatus {
-        IN_STOCK, LOW, CRITICAL
-    }
+import jakarta.persistence.*;
+import lombok.Data;
+import java.time.LocalDateTime;
 
+@Data
+@Entity
+public class Inventory {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private int quantity;
     private int threshold;
+
+    @Enumerated(EnumType.STRING)
     private InventoryStatus status;
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public enum InventoryStatus {
+        NORMAL, LOW, CRITICAL, IN_STOCK
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getThreshold() {
-        return threshold;
-    }
-
-    public void setThreshold(int threshold) {
-        this.threshold = threshold;
-    }
-
-    public InventoryStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(InventoryStatus status) {
-        this.status = status;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }
